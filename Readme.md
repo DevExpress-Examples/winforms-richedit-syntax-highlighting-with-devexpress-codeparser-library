@@ -1,3 +1,9 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [Form1.cs](./CS/WindowsFormsApplication1/Form1.cs) (VB: [Form1.vb](./VB/WindowsFormsApplication1/Form1.vb))
+* [SyntaxHighlighting.cs](./CS/WindowsFormsApplication1/SyntaxHighlighting.cs) (VB: [SyntaxHighlighting.vb](./VB/WindowsFormsApplication1/SyntaxHighlighting.vb))
+<!-- default file list end -->
 # Syntax highlighting HTML markup using DevExpress CodeParser library and Syntax Highlight tokens
 
 
