@@ -1,4 +1,7 @@
+Imports System
 Imports System.Collections.Generic
+Imports System.Linq
+Imports System.Text
 Imports DevExpress.XtraRichEdit.Services
 Imports DevExpress.XtraRichEdit.API.Native
 Imports DevExpress.CodeParser
@@ -8,7 +11,7 @@ Imports DevExpress.XtraRichEdit
 Namespace WindowsFormsApplication1
 
     Public Class HTMLSyntaxHighlightService
-        Implements ISyntaxHighlightService
+        Inherits ISyntaxHighlightService
 
         Private ReadOnly syntaxEditor As RichEditControl
 
@@ -35,7 +38,7 @@ Namespace WindowsFormsApplication1
         End Sub
 
         Private Sub HighlightSyntax(ByVal tokens As TokenCollection)
-            If TokensMapping.Count = 0 Then
+            If TokensMapping.Count Is 0 Then
                 AddTokensMapping(TokenCategory.HtmlAttributeName, Color.Red)
                 AddTokensMapping(TokenCategory.HtmlAttributeValue, Color.Blue)
                 AddTokensMapping(TokenCategory.HtmlComment, Color.Green)
@@ -55,11 +58,11 @@ Namespace WindowsFormsApplication1
                 textProperties.ForeColor = Color.Black
             End If
 
-            If tokens Is Nothing OrElse tokens.Count = 0 Then Return
+            If tokens Is Nothing OrElse tokens.Count Is 0 Then Return
             Dim document As Document = syntaxEditor.Document
             Dim syntaxTokens As List(Of SyntaxHighlightToken) = New List(Of SyntaxHighlightToken)(tokens.Count)
             For Each token As Token In tokens
-                HighlightCategorizedToken(CType(token, CategorizedToken), syntaxTokens)
+                Me.HighlightCategorizedToken(CType(token, CategorizedToken), syntaxTokens)
             Next
 
             document.ApplySyntaxHighlight(syntaxTokens)
@@ -68,29 +71,29 @@ Namespace WindowsFormsApplication1
         Private Sub HighlightCategorizedToken(ByVal token As CategorizedToken, ByVal syntaxTokens As List(Of SyntaxHighlightToken))
             Dim backColor As Color = syntaxEditor.ActiveView.BackColor
             Dim category As TokenCategory = token.Category
-            syntaxTokens.Add(SetTokenColor(token, GetTokensMapping(category), backColor))
+            syntaxTokens.Add(SetTokenColor(token, Me.GetTokensMapping(category), backColor))
         End Sub
 
         Private Function SetTokenColor(ByVal token As Token, ByVal foreColor As SyntaxHighlightProperties, ByVal backColor As Color) As SyntaxHighlightToken
             If syntaxEditor.Document.Paragraphs.Count < token.Range.Start.Line Then Return Nothing
             Dim paragraphStart As Integer = DocumentHelper.GetParagraphStart(syntaxEditor.Document.Paragraphs(token.Range.Start.Line - 1))
             Dim tokenStart As Integer = paragraphStart + token.Range.Start.Offset - 1
-            If token.Range.End.Line <> token.Range.Start.Line Then paragraphStart = DocumentHelper.GetParagraphStart(syntaxEditor.Document.Paragraphs(token.Range.End.Line - 1))
-            Dim tokenEnd As Integer = paragraphStart + token.Range.End.Offset - 1
+            If token.Range.[End].Line IsNot token.Range.Start.Line Then paragraphStart = DocumentHelper.GetParagraphStart(syntaxEditor.Document.Paragraphs(token.Range.[End].Line - 1))
+            Dim tokenEnd As Integer = paragraphStart + token.Range.[End].Offset - 1
             Return New SyntaxHighlightToken(tokenStart, tokenEnd - tokenStart, foreColor)
         End Function
 
 '#Region "#ISyntaxHighlightServiceMembers"
-        Public Sub Execute() Implements ISyntaxHighlightService.Execute
+        Public Sub Execute()
             Dim newText As String = syntaxEditor.Text
             ' Use DevExpress.CodeParser to parse text into tokens.
             Dim tokenHelper As ITokenCategoryHelper = TokenCategoryHelperFactory.CreateHelper(ParserLanguageID.Html)
             Dim highlightTokens As TokenCollection
             highlightTokens = tokenHelper.GetTokens(newText)
-            HighlightSyntax(highlightTokens)
+            Me.HighlightSyntax(highlightTokens)
         End Sub
 
-        Public Sub ForceExecute() Implements ISyntaxHighlightService.ForceExecute
+        Public Sub ForceExecute()
             Execute()
         End Sub
 '#End Region  ' #ISyntaxHighlightServiceMembers
