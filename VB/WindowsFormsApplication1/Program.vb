@@ -1,4 +1,6 @@
 Imports System
+Imports System.Collections.Generic
+Imports System.Linq
 Imports System.Windows.Forms
 
 Namespace WindowsFormsApplication1
@@ -10,9 +12,9 @@ Namespace WindowsFormsApplication1
         ''' </summary>
         <STAThread>
         Sub Main()
-            Call Application.EnableVisualStyles()
+            Application.EnableVisualStyles()
             Application.SetCompatibleTextRenderingDefault(False)
-            Call Application.Run(New Form1())
+            Application.Run(New Form1())
         End Sub
     End Module
 End Namespace

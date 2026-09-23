@@ -48,7 +48,7 @@ Namespace WindowsFormsApplication1
             Me.Controls.Add(Me.richEditControl1)
             Me.Name = "Form1"
             Me.Text = "Form1"
-            AddHandler Me.Load, New System.EventHandler(AddressOf Me.Form1_Load)
+            Me.Load += New System.EventHandler(AddressOf Me.Form1_Load)
             Me.ResumeLayout(False)
         End Sub
 
